@@ -125,8 +125,19 @@ fun LatestConversionRate(modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBar(modifier: Modifier = Modifier) {
-
+fun TopAppBarFun(modifier: Modifier = Modifier) {
+    Column {
+        TopAppBar(
+            title = {
+                Text(
+                    "Latest conversion rate",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            },
+            backgroundColor = MaterialTheme.colorScheme.primary
+        )
+    }
 } // end TopAppBar
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -139,20 +150,22 @@ fun MyScaffold(modifier: Modifier = Modifier) {
         scaffoldState = scaffoldState,
 //        drawerContent = { Text("Drawer content") },
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        "Latest conversion rate",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                },
-                backgroundColor = MaterialTheme.colorScheme.primary
-            )
+            TopAppBarFun()
+//            TopAppBar(
+//                title = {
+//                    Text(
+//                        "Latest conversion rate",
+//                        style = MaterialTheme.typography.bodyLarge,
+//                        color = MaterialTheme.colorScheme.onPrimary
+//                    )
+//                },
+//                backgroundColor = MaterialTheme.colorScheme.primary
+//            )// end TopAppBar
         },
         content = {
             LatestConversionRate()
         } // end content
+
     )
 }
 
@@ -176,6 +189,6 @@ fun MyScaffoldPreview() {
 @Composable
 fun DefaultPreview() {
     ExchangeRateTheme {
-        TopAppBar()
+        TopAppBarFun()
     }
 }
