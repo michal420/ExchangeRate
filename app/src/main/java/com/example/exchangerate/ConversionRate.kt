@@ -1,4 +1,4 @@
 package com.example.exchangerate
 
-data class ConversionRate(val currencyName: String, val currencyRate: Double)
+data class ConversionRate(val currencySymbol: String, val currencyRate: Double)
 

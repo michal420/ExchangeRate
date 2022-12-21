@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -19,18 +18,20 @@ import androidx.compose.ui.unit.dp
 import com.example.exchangerate.ui.theme.ExchangeRateTheme
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Scaffold
-import androidx.compose.material.TopAppBar
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.text.TextStyle
-import kotlinx.coroutines.launch
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.*
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.res.colorResource
+import java.util.Currency
+import androidx.compose.foundation.border as border1
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,13 +49,12 @@ fun SplashScreen(
     onContinueClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     Image(
         painter = painterResource(R.drawable.global_shares),
         contentDescription = null
     )
 
-//    var shouldShowOnboarding by remember { mutableStateOf(true) }
+//    var shouldShowOnboarding by rememberSaveable { mutableStateOf(true) }
 
     Column(
         modifier = modifier
@@ -92,7 +92,10 @@ fun SplashScreen(
 
 @Composable
 fun RunApp(modifier: Modifier = Modifier) {
-    var shouldShowOnboarding by remember { mutableStateOf(true) }
+    // Manage the state - remember if if user "logged in",
+    // so he is not moved back to the login screen again
+    // when state changes, e.g. screen rotated
+    var shouldShowOnboarding by rememberSaveable { mutableStateOf(true) }
 
     Surface(modifier) {
         if (shouldShowOnboarding) {
@@ -105,23 +108,65 @@ fun RunApp(modifier: Modifier = Modifier) {
 
 @Composable
 fun LatestConversionRate(modifier: Modifier = Modifier) {
+    // Get current date, format it and store in the variable
     val currentDate = LocalDate.now()
     val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
     val formattedDate = currentDate.format(formatter)
-//    Log.d("tag", "Current date is $formattedDate")
 
-    Column(modifier.padding(16.dp)) {
-        Text(
-            text = "Date: $formattedDate",
-            style = MaterialTheme.typography.bodyLarge,
-            fontWeight = FontWeight.Bold,
-        )
-    } // end Column (Date)
+    // Store conversion rates in the list
+    val conversionList: List<ConversionRate> = conversionRates
 
     Column() {
-        // Conversion rates here (cards?)
-    } // end Column Conversion rates
+        Column(modifier.padding(16.dp)) {
+            Text(
+                text = "Date: $formattedDate",
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Bold,
+            )
+        } // end Column (Date)
+
+        LazyColumn(modifier = modifier.padding(vertical = 8.dp)) {
+            // Conversion rates here (cards?)
+            items(items = conversionList) { conversion ->
+                Conversion(conversion)
+            }
+        } // end Column Conversion rates
+    } // end first Column
 } // end LatestConversion Rate
+
+@Composable
+fun Conversion(conRate: ConversionRate, modifier: Modifier = Modifier) {
+    val euroCurrency = Currency.getInstance("EUR")
+    Surface(
+//        color = MaterialTheme.colorScheme.secondary,
+    ) {
+        Column(
+//            modifier.padding(10.dp)
+        ) {
+            Card(
+                modifier
+                    .padding(2.dp)
+                    .fillMaxWidth(),
+                elevation = 4.dp,
+                shape = RoundedCornerShape(5.dp),
+            ) {
+                Row(
+                    modifier
+                        .padding(16.dp)
+                ) {
+                    Text(text = "1 ${euroCurrency.symbol} = ${conRate.currencyRate} ${conRate.currencySymbol}")
+                }
+            }
+        }
+//        Row(
+//            modifier = Modifier
+//                .padding(16.dp)
+//                .fillMaxWidth()
+//        ) {
+//            Text(text = "1 ${euroCurrency.symbol} = ${conRate.currencyRate} ${conRate.currencySymbol}")
+//        }
+    }
+} // end Conversion Rate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -138,7 +183,59 @@ fun TopAppBarFun(modifier: Modifier = Modifier) {
             backgroundColor = MaterialTheme.colorScheme.primary
         )
     }
-} // end TopAppBar
+} // end TopAppBarFun
+
+@Composable
+fun BottomAppBar(modifier: Modifier = Modifier) {
+
+    val selectedIndex = remember { mutableStateOf(0) }
+
+    BottomNavigation(
+        backgroundColor = MaterialTheme.colorScheme.primary,
+//        modifier = modifier.height(100.dp)
+    ) {
+
+        BottomNavigationItem(icon = {
+            Icon(imageVector = Icons.Default.Circle, "")
+        },
+            label = {
+                Text(
+                    text = "Latest rate",
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            },
+            selected = (selectedIndex.value == 0),
+            onClick = {
+                selectedIndex.value = 0
+            })
+        BottomNavigationItem(icon = {
+            Icon(imageVector = Icons.Default.TrendingUp, "")
+        },
+            label = {
+                Text(
+                    text = "Converter",
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            },
+            selected = (selectedIndex.value == 1),
+            onClick = {
+                selectedIndex.value = 1
+            })
+        BottomNavigationItem(icon = {
+            Icon(imageVector = Icons.Default.Euro, "")
+        },
+            label = {
+                Text(
+                    text = "Currencies list",
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            },
+            selected = (selectedIndex.value == 2),
+            onClick = {
+                selectedIndex.value = 2
+            })
+    } // end BottomNavigation
+} // end BottomAppBarFun
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -164,9 +261,12 @@ fun MyScaffold(modifier: Modifier = Modifier) {
         },
         content = {
             LatestConversionRate()
-        } // end content
+        }, // end content
+        bottomBar = {
+            BottomAppBar()
+        },
 
-    )
+        )
 }
 
 //@Preview(showBackground = true, widthDp = 320, heightDp = 720)
@@ -176,6 +276,22 @@ fun MyScaffold(modifier: Modifier = Modifier) {
 //        SplashScreen(onContinueClicked = {})
 //    }
 //}
+
+//@Preview
+//@Composable
+//fun ConversionPreview() {
+//    ExchangeRateTheme() {
+//        Conversion(ConversionRate("Euro", 1.234))
+//    }
+//}
+
+@Preview(showBackground = true, widthDp = 400)
+@Composable
+fun BottomAppBarPreview() {
+    ExchangeRateTheme {
+        BottomAppBar()
+    }
+}
 
 @Preview
 @Composable
