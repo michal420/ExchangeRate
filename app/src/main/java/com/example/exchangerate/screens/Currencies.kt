@@ -22,7 +22,7 @@ fun Currencies() {
 }
 
 @Composable
-fun CurrencyList(currencyList: List<MyCurrency>, modifier: Modifier = Modifier) {
+fun CurrencyList(currencyList: List<MyCurrency>) {
     LazyColumn {
         items(currencyList) { currency ->
             CurrencyCard(currency)

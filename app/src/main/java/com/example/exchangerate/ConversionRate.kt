@@ -19,6 +19,7 @@ val conversionRates = listOf(
         currencySymbol = "USD",
         currencyRate = 1.0516
     ),
+
 )
 
 

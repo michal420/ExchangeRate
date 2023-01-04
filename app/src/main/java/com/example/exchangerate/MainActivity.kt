@@ -127,32 +127,32 @@ fun SplashScreen(
     } // end Column
 } // end SplashScreen
 
-@Composable
-fun Conversion(conRate: ConversionRate, modifier: Modifier = Modifier) {
-    val euroCurrency = Currency.getInstance("EUR")
-    Surface(
-//        color = MaterialTheme.colorScheme.secondary,
-    ) {
-        Column(
-//            modifier.padding(10.dp)
-        ) {
-            Card(
-                modifier
-                    .padding(2.dp)
-                    .fillMaxWidth(),
-                elevation = 4.dp,
-                shape = RoundedCornerShape(5.dp),
-            ) {
-                Row(
-                    modifier
-                        .padding(16.dp)
-                ) {
-                    Text(text = "1 ${euroCurrency.symbol} = ${conRate.currencyRate} ${conRate.currencySymbol}")
-                }
-            }
-        }
-    }
-} // end Conversion Rate
+//@Composable
+//fun Conversion(conRate: ConversionRate, modifier: Modifier = Modifier) {
+//    val euroCurrency = Currency.getInstance("EUR")
+//    Surface(
+////        color = MaterialTheme.colorScheme.secondary,
+//    ) {
+//        Column(
+////            modifier.padding(10.dp)
+//        ) {
+//            Card(
+//                modifier
+//                    .padding(2.dp)
+//                    .fillMaxWidth(),
+//                elevation = 4.dp,
+//                shape = RoundedCornerShape(5.dp),
+//            ) {
+//                Row(
+//                    modifier
+//                        .padding(16.dp)
+//                ) {
+//                    Text(text = "1 ${euroCurrency.symbol} = ${conRate.currencyRate} ${conRate.currencySymbol}")
+//                }
+//            }
+//        }
+//    }
+//} // end Conversion Rate
 
 @Composable
 fun NavigationHost(navController: NavHostController) {
