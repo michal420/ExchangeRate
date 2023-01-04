@@ -1,6 +1,6 @@
 package com.example.exchangerate.screens
 
-import androidx.compose.foundation.background
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,12 +15,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
+import com.example.exchangerate.ConversionRate
+import com.example.exchangerate.conversionRates
 
 @Composable
 fun Converter(modifier: Modifier = Modifier) {
@@ -33,9 +36,17 @@ fun Converter(modifier: Modifier = Modifier) {
             Text(text = "From")
         }
         Row(
-            modifier.padding(bottom = 24.dp)
+            modifier
+                .padding(bottom = 24.dp)
+                .height(IntrinsicSize.Min)
         ) {
             CurrencyMenuBox(modifier = Modifier.padding(end = 8.dp))
+            Divider(
+                color = Color.White,
+                modifier = Modifier
+                    .fillMaxHeight()  //fill the max height
+                    .width(25.dp)
+            )
             OutlinedTextFieldFrom()
         }
 
@@ -44,46 +55,14 @@ fun Converter(modifier: Modifier = Modifier) {
         }
         Row(modifier = Modifier.padding(bottom = 16.dp)) {
             CurrencyMenuBox(modifier = Modifier.padding(end = 8.dp))
+            Divider(
+                color = Color.White,
+                modifier = Modifier
+                    .fillMaxHeight()  //fill the max height
+                    .width(25.dp)
+            )
             OutlinedTextFieldFrom()
         }
-
-
-//        Column {
-//            Text(text = "From")
-//            Row {
-//                Column(
-//                    modifier.
-//                    weight(1f)
-//                ) {
-//                    DropdownMenu()
-//                }
-//                Column(
-//                    modifier
-//                        .weight(2f)
-//                ) {
-//                    OutlinedTextFieldFrom()
-//                }
-//            }
-//        } // end Column From
-
-//        Column {
-//            Text(text = "To")
-//            Row {
-//                Column(
-//                    modifier.
-//                    weight(1f)
-//                ) {
-//                    DropdownMenu()
-//                }
-//                Column(
-//                    modifier
-//                        .weight(2f)
-//                ) {
-//                    OutlinedTextFieldFrom()
-//                }
-//            }
-//        } // end Column To
-
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -93,58 +72,58 @@ fun Converter(modifier: Modifier = Modifier) {
     } // end Column
 } // end Converter
 
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun DropdownMenu(modifier: Modifier) {
-//    val contextForToast = LocalContext.current.applicationContext
-    val listItems = arrayOf("EUR", "CAD", "USD", "GBP", "AUD")
-
-    var selectedItem by remember {
-        mutableStateOf(listItems[0])
-    }
-    var expanded by remember {
-        mutableStateOf(false)
-    }
-
-    // the box
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = {
-            expanded = !expanded
-        }
-    ) {
-
-        // text field
-        OutlinedTextField(
-            value = selectedItem,
-            onValueChange = {},
-            readOnly = true,
-//            label = { Text(text = "Label") },
-            trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(
-                    expanded = expanded
-                )
-            },
-            colors = ExposedDropdownMenuDefaults.textFieldColors()
-        )
-
-        // menu
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            listItems.forEach { selectedOption ->
-                // menu item
-                DropdownMenuItem(onClick = {
-                    selectedItem = selectedOption
-                    expanded = false
-                }) {
-                    Text(text = selectedOption)
-                }
-            }
-        }
-    }
-} // end DropdownMenu
+//@OptIn(ExperimentalMaterialApi::class)
+//@Composable
+//fun DropdownMenu(modifier: Modifier) {
+////    val contextForToast = LocalContext.current.applicationContext
+//    val listItems = arrayOf("EUR", "CAD", "USD", "GBP", "AUD")
+//
+//    var selectedItem by remember {
+//        mutableStateOf(listItems[0])
+//    }
+//    var expanded by remember {
+//        mutableStateOf(false)
+//    }
+//
+//    // the box
+//    ExposedDropdownMenuBox(
+//        expanded = expanded,
+//        onExpandedChange = {
+//            expanded = !expanded
+//        }
+//    ) {
+//
+//        // text field
+//        OutlinedTextField(
+//            value = selectedItem,
+//            onValueChange = {},
+//            readOnly = true,
+////            label = { Text(text = "Label") },
+//            trailingIcon = {
+//                ExposedDropdownMenuDefaults.TrailingIcon(
+//                    expanded = expanded
+//                )
+//            },
+//            colors = ExposedDropdownMenuDefaults.textFieldColors()
+//        )
+//
+//        // menu
+//        ExposedDropdownMenu(
+//            expanded = expanded,
+//            onDismissRequest = { expanded = false }
+//        ) {
+//            listItems.forEach { selectedOption ->
+//                // menu item
+//                DropdownMenuItem(onClick = {
+//                    selectedItem = selectedOption
+//                    expanded = false
+//                }) {
+//                    Text(text = selectedOption)
+//                }
+//            }
+//        }
+//    }
+//} // end DropdownMenu
 
 @Composable
 fun OutlinedTextFieldFrom() {
@@ -166,7 +145,9 @@ fun CurrencyMenuBox(modifier: Modifier) {
     // the expanded state of the Text Field
     var mExpanded by remember { mutableStateOf(false) }
 
-    val currenciesList = listOf("EUR", "CAD", "USD", "GBP", "AUD")
+//    val currenciesList = listOf("EUR", "CAD", "USD", "GBP", "AUD")
+
+    val currenciesList = conversionRates as MutableList<ConversionRate>
 
     // Create a string value to store the selected currency
     var mSelectedText by remember { mutableStateOf("") }
@@ -210,14 +191,15 @@ fun CurrencyMenuBox(modifier: Modifier) {
             expanded = mExpanded,
             onDismissRequest = { mExpanded = false },
             modifier = Modifier
-                .width(with(LocalDensity.current){mTextFieldSize.width.toDp()})
+                .width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
         ) {
+            currenciesList.sortBy { it.currencySymbol }
             currenciesList.forEach { label ->
                 DropdownMenuItem(onClick = {
-                    mSelectedText = label
+                    mSelectedText = label.currencySymbol
                     mExpanded = false
                 }) {
-                    Text(text = label)
+                    Text(text = label.currencySymbol)
                 }
             }
         }
@@ -241,7 +223,7 @@ fun ConvertButton() {
             Text(
                 text = "Convert",
                 modifier = Modifier.padding(8.dp)
-                )
+            )
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.exchangerate.screens
 
+import android.icu.util.Currency
 import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,41 +14,61 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.exchangerate.*
-import com.example.exchangerate.ui.theme.ExchangeRateTheme
+
 
 @Composable
 fun Currencies() {
-    val cl = currenciesList
-    CurrencyList(currencyList = cl)
+//    val cl = currenciesList
+    CurrencyList()
 }
 
+//@Composable
+//fun CurrencyList(currencyList: List<MyCurrency>) {
+//    LazyColumn {
+//        currencyList as MutableList<MyCurrency>
+//        currencyList.sortBy { it.currencyName }
+//        items(currencyList) { currency ->
+//            CurrencyCard(currency)
+//        }
+//    }
+//}
+
 @Composable
-fun CurrencyList(currencyList: List<MyCurrency>) {
+fun CurrencyList() {
+    val currenciesSet: Set<Currency> = Currency.getAvailableCurrencies()
+    val currenciesList = currenciesSet.toMutableList()
+    currenciesList.sortBy { it.displayName }
+//    Log.d("tag", "${it.symbol} / ${it.currencyCode} / ${it.displayName}")
     LazyColumn {
-        items(currencyList) { currency ->
+        items(currenciesList) { currency ->
             CurrencyCard(currency)
         }
     }
+//    currencies.forEach {
+//        Log.d("tag", " ${it.symbol} / ${it.currencyCode} / ${it.displayName}")
+//    }
 }
 
 @Composable
-fun CurrencyCard(currency: MyCurrency, modifier: Modifier = Modifier) {
+fun CurrencyCard(currency: Currency, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier
-            .padding(1.dp)
+            .padding(4.dp, 2.dp)
             .fillMaxWidth(),
-        elevation = 4.dp) {
+        elevation = 4.dp
+    ) {
         Column {
             Text(
-                text = "${currency.currencySymbol} ${currency.currencyAbbreviation} - ${currency.currencyName}",
+                text = "${currency.symbol} / ${currency.currencyCode} - ${currency.displayName}",
                 modifier = Modifier.padding(16.dp)
             )
         }
     }
 }
 
-@Preview
+@Preview(showBackground = true, heightDp = 720, widthDp = 380)
 @Composable
 private fun CurrencyCardPreview() {
-    CurrencyCard(currency = MyCurrency("Australian Dollar", "AUD", "$"))
+//    CurrencyCard(currency = MyCurrency("Australian Dollar", "AUD", "$"))
+    Currencies()
 }

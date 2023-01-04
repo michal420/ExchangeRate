@@ -1,9 +1,14 @@
 package com.example.exchangerate.screens
 
-import androidx.compose.foundation.layout.*
+import android.icu.util.Currency
+import android.util.Log
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
+import androidx.compose.material.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -12,12 +17,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.exchangerate.ConversionRate
-import com.example.exchangerate.MyCurrency
 import com.example.exchangerate.conversionRates
 import com.example.exchangerate.ui.theme.ExchangeRateTheme
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import androidx.compose.material.Card
+import java.util.*
 
 
 @Composable
@@ -45,6 +49,8 @@ fun Latest(modifier: Modifier = Modifier) {
 @Composable
 fun ConversionRateList(conversionList: List<ConversionRate>) {
     LazyColumn {
+        conversionList as MutableList<ConversionRate>
+        conversionList.sortBy { it.currencySymbol }
         items(conversionList) { conversion ->
             ConversionRateCard(conversionRate = conversion)
         }
@@ -55,40 +61,25 @@ fun ConversionRateList(conversionList: List<ConversionRate>) {
 fun ConversionRateCard(conversionRate: ConversionRate, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier
-            .padding(1.dp)
+            .padding(4.dp, 2.dp)
             .fillMaxWidth(),
-        elevation = 4.dp) {
+        elevation = 4.dp
+    ) {
         Column {
+            val euroSymbol = Currency.getInstance(Locale.GERMANY).symbol
             Text(
-                text = "${conversionRate.currencySymbol} = ${conversionRate.currencyRate}",
+                text = "$euroSymbol = ${conversionRate.currencyRate} ${conversionRate.currencySymbol}",
                 modifier = Modifier.padding(16.dp)
             )
         }
     }
 }
 
-//@Composable
-//fun ConversionRateCard(conversionRate: ConversionRate, modifier: Modifier = Modifier) {
-//    Card(
-//        modifier = modifier
-//            .padding(1.dp)
-//            .fillMaxWidth(),
-//        elevation = 4.dp
-//    ) {
-//        Column {
-//            androidx.compose.material.Text(
-//                text = "${currency.currencySymbol} ${currency.currencyAbbreviation} - ${currency.currencyName}",
-//                modifier = Modifier.padding(16.dp)
-//            )
-//        }
-//    }
-//}
-
-
 @Preview(showBackground = true, heightDp = 720, widthDp = 380)
 @Composable
-fun LatestPreview() {
+fun ConversionRateCardPreview() {
     ExchangeRateTheme {
+//        ConversionRateCard(conversionRate = ConversionRate("AUD", 1.1234))
         Latest()
     }
 }

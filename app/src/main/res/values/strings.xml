@@ -3,4 +3,5 @@
     <string name="latest_conversion">Latest conversion rate</string>
     <string name="currency_converter">Currency converter</string>
     <string name="currencies_list">Currencies list</string>
+    <string name="drop_down_menu">Dropdown Menu</string>
 </resources>
