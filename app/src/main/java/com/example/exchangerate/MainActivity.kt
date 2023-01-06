@@ -36,8 +36,6 @@ import com.example.exchangerate.screens.Latest
 import com.example.exchangerate.screens.Converter
 import com.example.exchangerate.screens.Currencies
 
-import java.util.Currency
-
 enum class ExchangeRateScreen(@StringRes val title: Int) {
     Latest(title = R.string.latest_conversion),
     Converter(title = R.string.currency_converter),
@@ -85,9 +83,6 @@ fun SplashScreen(
             .fillMaxHeight(),
         contentScale = ContentScale.Crop
     )
-
-    // Navigation Controller
-    val navController = rememberNavController()
 
 //    var shouldShowOnboarding by rememberSaveable { mutableStateOf(true) }
 
@@ -176,7 +171,6 @@ fun BottomNavigationBar(navController: NavHostController) {
         // Iterate through the items from BarItems and use
         // their fields
         NavBarItems.BarItems.forEach { navItem ->
-
             BottomNavigationItem(
                 selected = currentRoute == navItem.route,
                 onClick = {

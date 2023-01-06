@@ -1,7 +1,6 @@
 package com.example.exchangerate.screens
 
 import android.icu.util.Currency
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,7 +21,6 @@ import com.example.exchangerate.ui.theme.ExchangeRateTheme
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
-
 
 @Composable
 fun Latest(modifier: Modifier = Modifier) {
@@ -79,7 +77,6 @@ fun ConversionRateCard(conversionRate: ConversionRate, modifier: Modifier = Modi
 @Composable
 fun ConversionRateCardPreview() {
     ExchangeRateTheme {
-//        ConversionRateCard(conversionRate = ConversionRate("AUD", 1.1234))
         Latest()
     }
 }
