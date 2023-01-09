@@ -23,8 +23,9 @@ fun Currencies() {
 @Composable
 fun CurrencyList() {
     val currenciesSet: Set<Currency> = Currency.getAvailableCurrencies()
-    val currenciesList = currenciesSet.toMutableList()
-    currenciesList.sortBy { it.displayName }
+//    val currenciesList = currenciesSet.toMutableList()
+    val currenciesList = currenciesSet.sortedBy { it.displayName }
+//    currenciesList.sortedBy { it.displayName }
     LazyColumn {
         items(currenciesList) { currency ->
             CurrencyCard(currency)
@@ -49,23 +50,6 @@ fun CurrencyCard(currency: Currency, modifier: Modifier = Modifier) {
         }
     }
 }
-
-//@Composable
-//fun ConversionRateCard(currency: Currency, modifier: Modifier = Modifier) {
-//    Card(
-//        modifier = modifier
-//            .padding(4.dp, 2.dp)
-//            .fillMaxWidth(),
-//        elevation = 4.dp
-//    ) {
-//        Column {
-//            Text(
-//                text = "${currency.symbol} / ${currency.currencyCode} - ${currency.displayName}",
-//                modifier = Modifier.padding(16.dp)
-//            )
-//        }
-//    }
-//}
 
 @Preview(showBackground = true, heightDp = 720, widthDp = 380)
 @Composable

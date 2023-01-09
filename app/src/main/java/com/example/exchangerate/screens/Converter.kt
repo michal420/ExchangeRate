@@ -43,7 +43,7 @@ fun Converter(modifier: Modifier = Modifier) {
 @Composable
 fun OutlinedTextFieldFrom(rate: Double) {
     OutlinedTextField(
-        readOnly = true,
+//        readOnly = true,
         value = rate.toString(),
         onValueChange = { },
         label = { Text("") },
@@ -53,7 +53,7 @@ fun OutlinedTextFieldFrom(rate: Double) {
 @Composable
 fun OutlinedTextFieldTo(rate: Double) {
     OutlinedTextField(
-        readOnly = true,
+//        readOnly = true,
         value = rate.toString(),
         onValueChange = { },
         label = { Text("") },
