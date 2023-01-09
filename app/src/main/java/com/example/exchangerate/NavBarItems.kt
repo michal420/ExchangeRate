@@ -12,7 +12,7 @@ object NavBarItems {
     val BarItems = listOf(
         BarItem(
             title = "Latest rates",
-            image = Icons.Filled.WatchLater,
+            image = Icons.Filled.BarChart,
             route = "latest"
         ),
         BarItem(
@@ -22,7 +22,7 @@ object NavBarItems {
         ),
         BarItem(
             title = "Currencies list",
-            image = Icons.Filled.List,
+            image = Icons.Filled.AttachMoney,
             route = "currencies"
         )
     )

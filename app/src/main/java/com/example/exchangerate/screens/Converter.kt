@@ -1,6 +1,5 @@
 package com.example.exchangerate.screens
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,14 +25,9 @@ import com.example.exchangerate.conversionRates
 
 val currenciesList = conversionRates as MutableList<ConversionRate>
 
-//var rateFrom = currenciesList[0].currencyRate
-//var rateTo = currenciesList[0].currencyRate
-
 @Composable
 fun Converter(modifier: Modifier = Modifier) {
-    var selectedCurrency by rememberSaveable { mutableStateOf("") }
-//    val rate: MutableState<Double> = remember{mutableStateOf(1.0)}
-//    var rate by rememberSaveable { mutableStateOf(0.0) }
+//    var selectedCurrency by rememberSaveable { mutableStateOf("") }
 
     Column(
         modifier.padding(16.dp)
@@ -52,7 +46,7 @@ fun OutlinedTextFieldFrom(rate: Double) {
         readOnly = true,
         value = rate.toString(),
         onValueChange = { },
-        label = { Text("TextField From") },
+        label = { Text("") },
     )
 }
 
@@ -62,7 +56,7 @@ fun OutlinedTextFieldTo(rate: Double) {
         readOnly = true,
         value = rate.toString(),
         onValueChange = { },
-        label = { Text("TextField To") },
+        label = { Text("") },
     )
 }
 
@@ -74,8 +68,6 @@ fun CurrencyMenuBoxFrom( modifier: Modifier) {
     // Declaring a boolean value to store
     // the expanded state of the Text Field
     var mExpanded by remember { mutableStateOf(false) }
-
-//    val currenciesList = conversionRates as MutableList<ConversionRate>
 
     // Create a string value to store the selected currency
 //    var mSelectedText by remember { mutableStateOf("") }
@@ -156,8 +148,6 @@ fun CurrencyMenuBoxTo(modifier: Modifier) {
     // Declaring a boolean value to store
     // the expanded state of the Text Field
     var mExpanded by remember { mutableStateOf(false) }
-
-//    val currenciesList = conversionRates as MutableList<ConversionRate>
 
     // Create a string value to store the selected currency
     var mSelectedText by remember { mutableStateOf(currenciesList[0].currencySymbol) }

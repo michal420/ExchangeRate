@@ -1,14 +1,14 @@
 package com.example.exchangerate
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.example.exchangerate.ui.theme.ExchangeRateTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -26,6 +27,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -35,12 +39,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.exchangerate.screens.Latest
 import com.example.exchangerate.screens.Converter
 import com.example.exchangerate.screens.Currencies
-
-enum class ExchangeRateScreen(@StringRes val title: Int) {
-    Latest(title = R.string.latest_conversion),
-    Converter(title = R.string.currency_converter),
-    Currencies(title = R.string.currencies_list),
-}
+import java.nio.file.Files.size
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,16 +83,13 @@ fun SplashScreen(
         contentScale = ContentScale.Crop
     )
 
-//    var shouldShowOnboarding by rememberSaveable { mutableStateOf(true) }
-
     Column(
         modifier = modifier
             .fillMaxWidth()
             .padding(16.dp, 160.dp, 16.dp, 48.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(
-        ) {
+        Row {
             Text(
                 "Exchange\nRate",
                 style = MaterialTheme.typography.headlineLarge,
@@ -120,6 +116,20 @@ fun SplashScreen(
     } // end Column
 } // end SplashScreen
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "SuspiciousIndentation")
+@Composable
+fun MainScreen() {
+    val scaffoldState = rememberScaffoldState()
+    val navController = rememberNavController()
+
+    Scaffold(
+        scaffoldState = scaffoldState,
+        topBar = { ExchangeRateTopAppBar(navController) },
+        content = { NavigationHost(navController = navController) },
+        bottomBar = { BottomNavigationBar(navController = navController) },
+    )
+}
+
 @Composable
 fun NavigationHost(navController: NavHostController) {
     NavHost(
@@ -138,23 +148,38 @@ fun NavigationHost(navController: NavHostController) {
     }
 } // end NavigationHost
 
-@Composable
-fun ExchangeRateTopAppBar(
-    modifier: Modifier = Modifier
-) {
-    NavBarItems.BarItems.forEach { navItem ->
-        TopAppBar(
-            title = {
-                Text(
-                    text = navItem.title,
-//                    text = stringResource(currentScreenTitle),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-            },
-            backgroundColor = MaterialTheme.colorScheme.primary
-        )
+// Function to get title string of the route
+fun getTitleByRoute(context: Context, route: String?): String {
+    return when (route) {
+        "latest" -> context.getString(R.string.latest_conversion)
+        // other cases
+        "converter" -> context.getString(R.string.currency_converter)
+        else -> context.getString(R.string.currencies_list)
     }
+}
+
+@Composable
+fun ExchangeRateTopAppBar(navController: NavHostController) {
+    val context = LocalContext.current
+    var title by rememberSaveable { mutableStateOf("") }
+
+    LaunchedEffect(navController) {
+        navController.currentBackStackEntryFlow.collect { backStackEntry ->
+            // You can map the title based on the route using:
+            title = getTitleByRoute(context, backStackEntry?.destination?.route)
+        }
+    }
+
+    TopAppBar(
+        title = {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+        },
+        backgroundColor = MaterialTheme.colorScheme.primary
+    )
 }// end ExchangeRateTopAppBar
 
 @Composable
@@ -183,13 +208,24 @@ fun BottomNavigationBar(navController: NavHostController) {
                     }
                 },
                 label = {
-                    Text(text = navItem.title, color = Color.White)
+                    Text(
+                        text = navItem.title,
+                        color = if (currentRoute == navItem.route) {
+                            MaterialTheme.colorScheme.onPrimary
+                        } else {
+                            MaterialTheme.colorScheme.inversePrimary
+                        }
+                    )
                 },
                 icon = {
                     Icon(
                         imageVector = navItem.image,
                         contentDescription = navItem.title,
-                        tint = Color.White
+                        tint = if (currentRoute == navItem.route) {
+                            MaterialTheme.colorScheme.onPrimary
+                        } else {
+                            MaterialTheme.colorScheme.inversePrimary
+                        }
                     )
                 },
             ) // end BottomNavigationItem
@@ -197,31 +233,7 @@ fun BottomNavigationBar(navController: NavHostController) {
     }
 }
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "SuspiciousIndentation")
-@Composable
-fun MainScreen(modifier: Modifier = Modifier) {
-
-    val scaffoldState = rememberScaffoldState()
-
-    // Variable for Navigation State
-    val navController = rememberNavController()
-
-    val backStackEntry by navController.currentBackStackEntryAsState()
-    // Get the name of the current screen
-//    val currentScreen = ExchangeRateScreen.valueOf(
-//        backStackEntry?.destination?.route ?: ExchangeRateScreen.Latest.name
-//    )
-
-//    val scope = rememberCoroutineScope()
-    Scaffold(
-        scaffoldState = scaffoldState,
-        topBar = { ExchangeRateTopAppBar() },
-        content = { NavigationHost(navController = navController) },
-        bottomBar = { BottomNavigationBar(navController = navController) },
-    )
-}
-
-@Preview(showBackground = true, widthDp = 380, heightDp = 720)
+@Preview(showBackground = true, widthDp = 420, heightDp = 720)
 @Composable
 fun DefaultPreview() {
     ExchangeRateTheme {
