@@ -4,4 +4,6 @@
     <string name="currency_converter">Currency converter</string>
     <string name="currencies_list">Currencies list</string>
     <string name="drop_down_menu">Dropdown Menu</string>
+    <string name="loading_failed">Loading failed</string>
+    <string name="retry">Retry</string>
 </resources>

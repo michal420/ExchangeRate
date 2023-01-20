@@ -1,6 +1,14 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+//    id 'org.jetbrains.kotlin.plugin.serialization' version '1.7.10'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.10'
+
+    id 'kotlin-kapt'
+//    id 'dagger.hilt.android.plugin'
+//    id 'com.google.dagger.hilt.android' version '2.41' apply false
+    id 'com.google.dagger.hilt.android' version '2.44' apply false
+
 }
 
 android {
@@ -47,6 +55,54 @@ android {
 }
 
 dependencies {
+//    // Dagger - Hilt
+    implementation "com.google.dagger:hilt-android:2.44"
+    kapt "com.google.dagger:hilt-compiler:2.44"
+
+//    implementation "com.android.tools.build:gradle:4.1.1"
+//    implementation  "org.jetbrains.kotlin:kotlin-gradle-plugin: 1.7.20"
+//    implementation "com.google.dagger:hilt-android-gradle-plugin:2.28.3-alpha"
+//    kapt "com.google.dagger:hilt-android-compiler:2.28.3-alpha"
+//    implementation "androidx..hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02"
+//    kapt "androidx.hilt:hilt-compiler:1.0.0-alpha02"
+//
+//    // Activity KTX for viewModels()
+//    implementation "androidx.activity:activity-ktx:1.1.0"
+
+    // Architectural components
+//    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+
+    // Lifecycle
+//    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+//    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
+//    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
+
+//    implementation "com.squareup.okhttp3:okhttp4:4.9.0"
+
+// --------------------------------------------------------
+
+    // Moshi
+    implementation "com.squareup.moshi:moshi:1.12.0"
+//    kapt "com.squareup.moshi:moshi-kotlin-codegen:1.12.0"
+    implementation "com.squareup.retrofit2:converter-moshi:2.5.0"
+    implementation "com.squareup.moshi:moshi-kotlin:1.12.0"
+
+    /**
+     * The first dependency is for the Retrofit2 library itself, and the second dependency is for the Retrofit scalar converter.
+     * Retrofit2 is the updated version of the Retrofit library.
+     * This scalar converter enables Retrofit to return the JSON result as a String
+     */
+    //Retrofit
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    // Retrofit with Scalar Converter
+    implementation "com.squareup.retrofit2:converter-scalars:2.9.0"
+    // Replaced with jakewharton:
+    // Retrofit with Kotlin serialization Converter
+    implementation "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0"
+
+    // Kotlin serialization
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0"
+
     implementation 'com.google.code.gson:gson:2.8.5'
 
     implementation "androidx.navigation:navigation-compose:2.5.3"
@@ -66,10 +122,18 @@ dependencies {
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     implementation 'androidx.compose.material3:material3:1.0.0-alpha02'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.google.android.datatransport:transport-runtime:3.1.2'
+    implementation 'com.google.firebase:firebase-inappmessaging-display-ktx:20.2.0'
+    implementation 'com.google.firebase:firebase-inappmessaging-ktx:20.2.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes true
 }

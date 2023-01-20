@@ -12,13 +12,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.exchangerate.ConversionRate
+import androidx.lifecycle.viewmodel.compose.viewModel
 import java.util.*
 
 @Composable
 fun Currencies() {
-    CurrencyList()
+//    CurrencyList()
+    val currenciesViewModel: CurrenciesViewModel = viewModel(factory = CurrenciesViewModel.Factory)
+    HomeScreen(
+        currenciesUiState = currenciesViewModel.currenciesUiState,
+        retryAction = currenciesViewModel::getCurrencies
+    )
 }
+
+@OptIn(ExperimentalStdlibApi::class)
+
 
 @Composable
 fun CurrencyList() {
