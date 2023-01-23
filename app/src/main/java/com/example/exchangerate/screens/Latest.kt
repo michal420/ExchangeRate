@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.exchangerate.ConversionRate
 import com.example.exchangerate.conversionRates
 import com.example.exchangerate.ui.theme.ExchangeRateTheme
@@ -40,7 +41,13 @@ fun Latest(modifier: Modifier = Modifier) {
                 fontWeight = FontWeight.Bold,
             )
         }
-        ConversionRateList(conversionList = conversionList)
+//        ConversionRateList(conversionList = conversionList)
+
+        val ratesViewModel: RatesViewModel = viewModel(factory = RatesViewModel.Factory)
+        RatesHomeScreen(
+            ratesUiState = ratesViewModel.ratesUiState,
+            retryAction = ratesViewModel::getRates
+        )
     }
 } // end Latest
 

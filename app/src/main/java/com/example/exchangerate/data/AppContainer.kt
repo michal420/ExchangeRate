@@ -10,6 +10,7 @@ import retrofit2.Retrofit
 
 interface AppContainer {
     val currenciesRepository: CurrenciesRepository
+    val ratesRepository: RatesRepository
 }
 
 class DefaultAppContainer : AppContainer {
@@ -32,6 +33,10 @@ class DefaultAppContainer : AppContainer {
     // DI implementation of currencies repository
     override val currenciesRepository: CurrenciesRepository by lazy {
         NetworkCurrenciesRepository(retrofitService)
+    }
+
+    override val ratesRepository: RatesRepository by lazy {
+        NetworkRatesRepository(retrofitService)
     }
 
 }
