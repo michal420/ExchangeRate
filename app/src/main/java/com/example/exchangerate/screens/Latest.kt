@@ -30,9 +30,6 @@ fun Latest(modifier: Modifier = Modifier) {
     val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
     val formattedDate = currentDate.format(formatter)
 
-    // Store conversion rates in the list
-    val conversionList: List<ConversionRate> = conversionRates
-
     Column {
         Row(modifier.padding(16.dp)) {
             Text(
@@ -41,7 +38,6 @@ fun Latest(modifier: Modifier = Modifier) {
                 fontWeight = FontWeight.Bold,
             )
         }
-//        ConversionRateList(conversionList = conversionList)
 
         val ratesViewModel: RatesViewModel = viewModel(factory = RatesViewModel.Factory)
         RatesHomeScreen(
@@ -49,36 +45,7 @@ fun Latest(modifier: Modifier = Modifier) {
             retryAction = ratesViewModel::getRates
         )
     }
-} // end Latest
-
-//@Composable
-//fun ConversionRateList(conversionList: List<ConversionRate>) {
-//    LazyColumn {
-//        conversionList as MutableList<ConversionRate>
-//        conversionList.sortBy { it.currencySymbol }
-//        items(conversionList) { conversion ->
-//            ConversionRateCard(conversionRate = conversion)
-//        }
-//    }
-//}
-
-//@Composable
-//fun ConversionRateCard(conversionRate: ConversionRate, modifier: Modifier = Modifier) {
-//    Card(
-//        modifier = modifier
-//            .padding(4.dp, 2.dp)
-//            .fillMaxWidth(),
-//        elevation = 4.dp
-//    ) {
-//        Column {
-//            val euroSymbol = Currency.getInstance(Locale.GERMANY).symbol
-//            Text(
-//                text = "$euroSymbol = ${conversionRate.currencyRate} ${conversionRate.currencySymbol}",
-//                modifier = Modifier.padding(16.dp)
-//            )
-//        }
-//    }
-//}
+}
 
 @Preview(showBackground = true, heightDp = 720, widthDp = 380)
 @Composable

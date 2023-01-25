@@ -17,8 +17,6 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 
-//GIT
-
 /**
  * UI state for the Home screen
  */

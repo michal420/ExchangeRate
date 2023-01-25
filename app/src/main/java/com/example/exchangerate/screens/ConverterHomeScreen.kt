@@ -70,7 +70,6 @@ fun OutlinedTextFieldFrom(amount: String, onAmountChange: (String) -> Unit) {
         value = "$amount",
         maxLines = 1,
         onValueChange = onAmountChange,
-//        onValueChange = { manageLength(it) },
 //        onValueChange = {
 //            if (amount.length <= maxLength) onAmountChange
 //        },
@@ -79,11 +78,6 @@ fun OutlinedTextFieldFrom(amount: String, onAmountChange: (String) -> Unit) {
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
     )
 }
-
-// Prevent the user from entering too many and too little characters
-//private fun manageLength(input: String) = if (input.length > 6)
-//    input.substring(0..5)
-//else input
 
 @Composable
 fun OutlinedTextFieldTo(amount: Double, rate: Double) {
@@ -104,11 +98,6 @@ fun CurrencyMenuBoxFrom(currencyRates: CurrencyRates, modifier: Modifier) {
 
     // Get a Euro currency for the dropdown
     val euroList = listOf(currencyRates.base)
-
-    // Return currency symbol and rates as the list of MyRates
-//    val myRatesList = makeRatesList(currencyRates.rates)
-
-//    var rate by rememberSaveable { mutableStateOf(myRatesList[0].rate) }
 
     // Declaring a boolean value to store
     // the expanded state of the Text Field
@@ -158,7 +147,6 @@ fun CurrencyMenuBoxFrom(currencyRates: CurrencyRates, modifier: Modifier) {
                 onDismissRequest = { mExpanded = false },
                 modifier = Modifier.width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
             ) {
-//                currenciesList.sortBy { it.currencySymbol }
                 euroList.forEach { label ->
                     DropdownMenuItem(onClick = {
                         mSelectedText = label
@@ -181,10 +169,9 @@ fun CurrencyMenuBoxFrom(currencyRates: CurrencyRates, modifier: Modifier) {
 // -------CURRENCY MENU BOX  TO---------------
 @Composable
 fun CurrencyMenuBoxTo(myRatesList: List<MyRate>, modifier: Modifier) {
-//    // Return currency symbol and rates as the list of MyRates
-//    val myRatesList = makeRatesList(currencyRates.rates)
 //
     var rate by rememberSaveable { mutableStateOf(myRatesList[0].rate) }
+
     // Declaring a boolean value to store
     // the expanded state of the Text Field
     var mExpanded by remember { mutableStateOf(false) }
@@ -231,7 +218,6 @@ fun CurrencyMenuBoxTo(myRatesList: List<MyRate>, modifier: Modifier) {
                 onDismissRequest = { mExpanded = false },
                 modifier = Modifier.width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
             ) {
-//                currenciesList.sortBy { it.currencySymbol }
                 myRatesList.forEach { label ->
                     DropdownMenuItem(onClick = {
                         mSelectedText = label.symbol

@@ -13,20 +13,8 @@ interface CurrenciesApiService {
     @GET("currencies")
     suspend fun getCurrencies(): Map<String, String>
 
-//    @GET("/latest")
-//    suspend fun getRates(
-//        @Query("rates") rates: Map<String, Double>
-//    ): CurrencyRates
-
   @GET("latest")
   suspend fun getRates(): CurrencyRates
-
-//interface CurrencyApi {
-//    @GET("/latest")
-//    suspend fun getRates(
-//        @Query("base") base: String
-//    ): Response<CurrencyRates>
-//}
 
 }
 
