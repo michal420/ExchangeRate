@@ -51,34 +51,34 @@ fun Latest(modifier: Modifier = Modifier) {
     }
 } // end Latest
 
-@Composable
-fun ConversionRateList(conversionList: List<ConversionRate>) {
-    LazyColumn {
-        conversionList as MutableList<ConversionRate>
-        conversionList.sortBy { it.currencySymbol }
-        items(conversionList) { conversion ->
-            ConversionRateCard(conversionRate = conversion)
-        }
-    }
-}
+//@Composable
+//fun ConversionRateList(conversionList: List<ConversionRate>) {
+//    LazyColumn {
+//        conversionList as MutableList<ConversionRate>
+//        conversionList.sortBy { it.currencySymbol }
+//        items(conversionList) { conversion ->
+//            ConversionRateCard(conversionRate = conversion)
+//        }
+//    }
+//}
 
-@Composable
-fun ConversionRateCard(conversionRate: ConversionRate, modifier: Modifier = Modifier) {
-    Card(
-        modifier = modifier
-            .padding(4.dp, 2.dp)
-            .fillMaxWidth(),
-        elevation = 4.dp
-    ) {
-        Column {
-            val euroSymbol = Currency.getInstance(Locale.GERMANY).symbol
-            Text(
-                text = "$euroSymbol = ${conversionRate.currencyRate} ${conversionRate.currencySymbol}",
-                modifier = Modifier.padding(16.dp)
-            )
-        }
-    }
-}
+//@Composable
+//fun ConversionRateCard(conversionRate: ConversionRate, modifier: Modifier = Modifier) {
+//    Card(
+//        modifier = modifier
+//            .padding(4.dp, 2.dp)
+//            .fillMaxWidth(),
+//        elevation = 4.dp
+//    ) {
+//        Column {
+//            val euroSymbol = Currency.getInstance(Locale.GERMANY).symbol
+//            Text(
+//                text = "$euroSymbol = ${conversionRate.currencyRate} ${conversionRate.currencySymbol}",
+//                modifier = Modifier.padding(16.dp)
+//            )
+//        }
+//    }
+//}
 
 @Preview(showBackground = true, heightDp = 720, widthDp = 380)
 @Composable

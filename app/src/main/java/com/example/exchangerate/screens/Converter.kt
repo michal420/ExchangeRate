@@ -20,230 +20,34 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.exchangerate.ConversionRate
 import com.example.exchangerate.conversionRates
+import com.example.exchangerate.model.CurrencyRates
+import com.example.exchangerate.model.MyCurrency
+import com.example.exchangerate.model.MyRate
 
-val currenciesList = conversionRates as MutableList<ConversionRate>
+//val currenciesList = conversionRates as MutableList<ConversionRate>
 
 @Composable
 fun Converter(modifier: Modifier = Modifier) {
 //    var selectedCurrency by rememberSaveable { mutableStateOf("") }
+    val ratesViewModel: RatesViewModel = viewModel(factory = RatesViewModel.Factory)
 
-    Column(
-        modifier.padding(16.dp)
-    ) {
-        Text(text = "From")
-        CurrencyMenuBoxFrom( modifier = Modifier)
-        Text(text = "To")
-        CurrencyMenuBoxTo(modifier = Modifier)
-        ConvertButton()
-    } // end Column
+    ConverterHomeScreen(
+        ratesUiState = ratesViewModel.ratesUiState,
+        retryAction = ratesViewModel::getRates
+    )
+//    Column(
+//        modifier.padding(16.dp)
+//    ) {
+//        Text(text = "From")
+//        CurrencyMenuBoxFrom(modifier = Modifier)
+//        Text(text = "To")
+////        CurrencyMenuBoxTo(modifier = Modifier)
+//        CurrencyMenuBoxTo(modifier = Modifier)
+//        ConvertButton()
+//    } // end Column
+
 } // end Converter
 
-@Composable
-fun OutlinedTextFieldFrom(rate: Double) {
-    OutlinedTextField(
-//        readOnly = true,
-        value = rate.toString(),
-        onValueChange = { },
-        label = { Text("") },
-    )
-}
-
-@Composable
-fun OutlinedTextFieldTo(rate: Double) {
-    OutlinedTextField(
-//        readOnly = true,
-        value = rate.toString(),
-        onValueChange = { },
-        label = { Text("") },
-    )
-}
-
-// -------CURRENCY MENU BOX  FROM---------------
-@Composable
-fun CurrencyMenuBoxFrom( modifier: Modifier) {
-    var rate by rememberSaveable { mutableStateOf(currenciesList[0].currencyRate) }
-
-    // Declaring a boolean value to store
-    // the expanded state of the Text Field
-    var mExpanded by remember { mutableStateOf(false) }
-
-    // Create a string value to store the selected currency
-//    var mSelectedText by remember { mutableStateOf("") }
-    var mSelectedText by remember { mutableStateOf(currenciesList[0].currencySymbol) }
-
-    var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
-
-    // Up Icon when expanded and down icon when collapsed
-    val icon = if (mExpanded)
-        Icons.Filled.KeyboardArrowUp
-    else
-        Icons.Filled.KeyboardArrowDown
-
-    Row(
-        modifier
-            .padding(bottom = 24.dp)
-            .height(IntrinsicSize.Min)
-    ) {
-        Column(
-//        Modifier.padding(20.dp)
-        ) {
-
-            // Create an Outlined Text Field
-            // with icon and not expanded
-            OutlinedTextField(
-                value = mSelectedText,
-                onValueChange = { mSelectedText = it },
-                modifier = Modifier
-//                .fillMaxWidth()
-                    .width(100.dp)
-                    .onGloballyPositioned { coordinates ->
-                        // This value is used to assign the same width
-                        //  to the DropDown
-                        mTextFieldSize = coordinates.size.toSize()
-                    },
-                label = { Text("") },
-                readOnly = true,
-                trailingIcon = {
-                    Icon(icon, "contentDescription",
-                        Modifier.clickable { mExpanded = !mExpanded })
-                }
-            )
-            // Create a drop-down menu with list of currencies,
-            // when clicked, set the Text Field with selected currency
-            DropdownMenu(
-                expanded = mExpanded,
-                onDismissRequest = { mExpanded = false },
-                modifier = Modifier
-                    .width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
-            ) {
-                currenciesList.sortBy { it.currencySymbol }
-                currenciesList.forEach { label ->
-                    DropdownMenuItem(onClick = {
-                        mSelectedText = label.currencySymbol
-                        rate = label.currencyRate
-                        mExpanded = false
-                    }) {
-                        Text(text = label.currencySymbol)
-                    }
-                }
-            }
-        } // end Column (Dropdown)
-        Divider(
-            color = Color.White,
-            modifier = Modifier
-                .fillMaxHeight()  //fill the max height
-                .width(25.dp)
-        )
-        OutlinedTextFieldFrom(rate = rate)
-    }
-
-} // End Currency Menu Box To
-
-// -------CURRENCY MENU BOX  TO---------------
-@Composable
-fun CurrencyMenuBoxTo(modifier: Modifier) {
-    var rate by rememberSaveable { mutableStateOf(currenciesList[0].currencyRate) }
-    // Declaring a boolean value to store
-    // the expanded state of the Text Field
-    var mExpanded by remember { mutableStateOf(false) }
-
-    // Create a string value to store the selected currency
-    var mSelectedText by remember { mutableStateOf(currenciesList[0].currencySymbol) }
-
-    var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
-
-    // Up Icon when expanded and down icon when collapsed
-    val icon = if (mExpanded)
-        Icons.Filled.KeyboardArrowUp
-    else
-        Icons.Filled.KeyboardArrowDown
-
-    Row(
-        modifier
-            .padding(bottom = 24.dp)
-            .height(IntrinsicSize.Min)
-    ) {
-        Column(
-//        Modifier.padding(20.dp)
-        ) {
-
-            // Create an Outlined Text Field
-            // with icon and not expanded
-            OutlinedTextField(
-                value = mSelectedText,
-                onValueChange = { mSelectedText = it },
-                modifier = Modifier
-//                .fillMaxWidth()
-                    .width(100.dp)
-                    .onGloballyPositioned { coordinates ->
-                        // This value is used to assign the same width
-                        //  to the DropDown
-                        mTextFieldSize = coordinates.size.toSize()
-                    },
-                label = { Text("") },
-                readOnly = true,
-                trailingIcon = {
-                    Icon(icon, "contentDescription",
-                        Modifier.clickable { mExpanded = !mExpanded })
-                }
-            )
-            // Create a drop-down menu with list of currencies,
-            // when clicked, set the Text Field with selected currency
-            DropdownMenu(
-                expanded = mExpanded,
-                onDismissRequest = { mExpanded = false },
-                modifier = Modifier
-                    .width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
-            ) {
-                currenciesList.sortBy { it.currencySymbol }
-                currenciesList.forEach { label ->
-                    DropdownMenuItem(onClick = {
-                        mSelectedText = label.currencySymbol
-                        rate = label.currencyRate
-                        mExpanded = false
-                    }) {
-                        Text(text = label.currencySymbol)
-                    }
-                }
-            }
-        } // end Column (Dropdown)
-        Divider(
-            color = Color.White,
-            modifier = Modifier
-                .fillMaxHeight()  //fill the max height
-                .width(25.dp)
-        )
-        OutlinedTextFieldTo(rate = rate)
-    }
-} // End Currency Menu Box To
-
-@Composable
-fun ConvertButton() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.End
-    ) {
-        Button(
-            onClick = {},
-            shape = RoundedCornerShape(5.dp),
-            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary),
-        )
-        {
-            Text(
-                text = "Convert",
-                modifier = Modifier.padding(8.dp)
-            )
-        }
-    }
-}
-
-@Preview(showBackground = true, heightDp = 720, widthDp = 380)
-@Composable
-fun ConverterPreview() {
-    ExchangeRateTheme {
-        Converter()
-    }
-}

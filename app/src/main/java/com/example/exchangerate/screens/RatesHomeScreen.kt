@@ -58,40 +58,7 @@ fun RatesScreen(currencyRates: CurrencyRates, modifier: Modifier = Modifier) {
             RatesCard(r)
         }
     }
-
-//    @JsonClass(generateAdapter = true)
-//    data class Wrapper(@com.squareup.moshi.Json(name = "list") val list: List<CurrencyRates>)
-//
-//    val moshi = Moshi.Builder()
-//        .add(KotlinJsonAdapterFactory())
-//        .build()
-//    val adapter = moshi.adapter(Wrapper::class.java)
-//    val currency = adapter.fromJson(response.body!!.source())!!.list
-
-
-//    LazyColumn {
-//        items(currenciesList) {
-//            RatesCard(symbol = currencyRates.rates, rate = currencyRates.rates)
-//        }
-//    }
-
-//    Column {
-//        Text("${currencyRates.base}")
-//        Text("Rates Screen")
-//        Text("${currencyRates.rates}")
-//    }
 }
-
-//@Composable
-//fun CurrenciesListScreen(currencies: Map<String, String>, modifier: Modifier = Modifier) {
-//    val currenciesList = makeList(currencies)
-//
-//    LazyColumn {
-//        items(items = currenciesList, key = { currency -> currency.symbol }) { currency ->
-//            CurrenciesListCard(symbol = currency.symbol, name = currency.name)
-//        }
-//    }
-//}
 
 @Composable
 fun RatesCard(myRate: MyRate, modifier: Modifier = Modifier) {
@@ -114,3 +81,14 @@ fun RatesCard(myRate: MyRate, modifier: Modifier = Modifier) {
         }
     }
 }
+
+//@Composable
+//fun CurrenciesListScreen(currencies: Map<String, String>, modifier: Modifier = Modifier) {
+//    val currenciesList = makeList(currencies)
+//
+//    LazyColumn {
+//        items(items = currenciesList, key = { currency -> currency.symbol }) { currency ->
+//            CurrenciesListCard(symbol = currency.symbol, name = currency.name)
+//        }
+//    }
+//}
