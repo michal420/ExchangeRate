@@ -1,4 +1,4 @@
-package com.example.exchangerate
+package com.example.exchangerate.nav
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

@@ -1,4 +1,4 @@
-package com.example.exchangerate.screens
+package com.example.exchangerate.main.currencies
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -10,9 +10,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.exchangerate.CurrenciesApplication
 import com.example.exchangerate.data.CurrenciesRepository
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import com.example.exchangerate.data.RatesRepository
-import com.example.exchangerate.model.CurrencyRates
+import com.example.exchangerate.model.Currencies
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -60,7 +58,7 @@ class CurrenciesViewModel(private val currenciesRepository: CurrenciesRepository
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = (this[APPLICATION_KEY] as CurrenciesApplication)
+                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as CurrenciesApplication)
                 val currencyRepository = application.container.currenciesRepository
                 CurrenciesViewModel(currenciesRepository = currencyRepository)
             }
@@ -69,52 +67,16 @@ class CurrenciesViewModel(private val currenciesRepository: CurrenciesRepository
 
 }
 
-sealed interface RatesUiState {
-    data class Success(val rates: CurrencyRates): RatesUiState
-    object Error : RatesUiState
-    object Loading : RatesUiState
-}
-
-class RatesViewModel(private val ratesRepository: RatesRepository) : ViewModel() {
-    /** The mutable State that stores the status of the most recent request */
-    var ratesUiState: RatesUiState by mutableStateOf(RatesUiState.Loading)
-        private set
-
-    /**
-     * Call getCurrencies() on init so we can display status immediately.
-     */
-    init {
-        getRates()
-    }
-
-    /**
-     * Gets currencies information from the API service
-     */
-    fun getRates() {
-        viewModelScope.launch {
-            ratesUiState = RatesUiState.Loading
-            ratesUiState = try {
-                RatesUiState.Success(ratesRepository.getRates())
-            } catch (e: IOException) {
-                RatesUiState.Error
-            } catch (e: HttpException) {
-                RatesUiState.Error
-            }
+// Convert map to Currencies list
+fun makeCurrenciesList(currenciesMap: Map<String, String>): List<Currencies> {
+    val currenciesList = mutableListOf<Currencies>()
+    val iter = currenciesMap.keys.iterator()
+    while (iter.hasNext()) {
+        val key = iter.next()
+        val value = currenciesMap[key]
+        if (value != null) {
+            currenciesList.add(Currencies(key, value))
         }
     }
-
-    /**
-     * Factory for [RatesViewModel] that takes [RatesRepository] as a dependency
-     */
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val application = (this[APPLICATION_KEY] as CurrenciesApplication)
-                val ratesRepository = application.container.ratesRepository
-                RatesViewModel(ratesRepository = ratesRepository)
-            }
-        }
-    }
-
+    return currenciesList
 }
-

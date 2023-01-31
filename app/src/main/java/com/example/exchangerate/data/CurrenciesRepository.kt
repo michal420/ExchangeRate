@@ -3,8 +3,6 @@ package com.example.exchangerate.data
 import com.example.exchangerate.model.CurrencyRates
 import com.example.exchangerate.network.CurrenciesApiService
 
-// GIT
-
 // Repository that fetches data
 interface CurrenciesRepository {
     suspend fun getCurrencies(): Map<String, String>
@@ -27,8 +25,3 @@ class NetworkRatesRepository(
 ) : RatesRepository {
     override suspend fun getRates(): CurrencyRates = currenciesApiService.getRates()
 }
-
-//@GET("latest")
-//suspend fun getRates(
-//    @Query("rates") rates: Map<String, Double>
-//): CurrencyRates

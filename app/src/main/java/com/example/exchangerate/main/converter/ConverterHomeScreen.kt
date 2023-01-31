@@ -1,9 +1,7 @@
-package com.example.exchangerate.screens
+package com.example.exchangerate.main.converter
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -11,7 +9,6 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -21,12 +18,16 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import com.example.exchangerate.main.latest.RatesUiState
+import com.example.exchangerate.main.latest.makeRatesList
 import com.example.exchangerate.model.CurrencyRates
-import com.example.exchangerate.model.MyRate
+import com.example.exchangerate.model.Rates
+import com.example.exchangerate.main.currencies.ErrorScreen
+import com.example.exchangerate.main.currencies.LoadingScreen
 import java.text.DecimalFormat
-import java.time.format.DateTimeFormatter
 
 var theAmount = 1.0
+var theRate = 0.0
 
 @Composable
 fun ConverterHomeScreen(
@@ -45,34 +46,32 @@ fun ConverterScreen(currencyRates: CurrencyRates, modifier: Modifier = Modifier)
     val myRatesList = makeRatesList(currencyRates.rates)
 
     var amount by rememberSaveable { mutableStateOf("1.0") }
-    theAmount = amount.toDouble()
-    Log.d("amt", "amount: $amount")
+    var rate by rememberSaveable { mutableStateOf("0.0") }
+
+    theAmount = amount?.toDoubleOrNull() ?: 1.0
+    theRate = rate?.toDoubleOrNull() ?: 0.0
 
     Column(
         modifier.padding(16.dp)
     ) {
         Text(text = "From")
-        Row() {
+        Row {
             CurrencyMenuBoxFrom(currencyRates = currencyRates, modifier = Modifier)
             OutlinedTextFieldFrom(amount = amount, onAmountChange = { amount = it })
         }
         Text(text = "To")
-        Row() {
-            CurrencyMenuBoxTo(myRatesList = myRatesList, modifier = Modifier)
+        Row {
+            CurrencyMenuBoxTo(myRatesList = myRatesList, onRateChange = { theRate = rate.toDouble() }, modifier = Modifier)
         }
     }
 }
 
 @Composable
 fun OutlinedTextFieldFrom(amount: String, onAmountChange: (String) -> Unit) {
-//    val maxLength = 6
     OutlinedTextField(
-        value = "$amount",
+        value = amount,
         maxLines = 1,
         onValueChange = onAmountChange,
-//        onValueChange = {
-//            if (amount.length <= maxLength) onAmountChange
-//        },
         label = { Text("") },
         textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
@@ -104,7 +103,6 @@ fun CurrencyMenuBoxFrom(currencyRates: CurrencyRates, modifier: Modifier) {
     var mExpanded by remember { mutableStateOf(false) }
 
     // Create a string value to store the selected currency
-//    var mSelectedText by remember { mutableStateOf("") }
     var mSelectedText by remember { mutableStateOf(euroList[0]) }
 
     var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
@@ -127,7 +125,6 @@ fun CurrencyMenuBoxFrom(currencyRates: CurrencyRates, modifier: Modifier) {
             OutlinedTextField(value = mSelectedText,
                 onValueChange = { mSelectedText = it },
                 modifier = Modifier
-//                .fillMaxWidth()
                     .width(100.dp)
                     .onGloballyPositioned { coordinates ->
                         // This value is used to assign the same width
@@ -168,7 +165,11 @@ fun CurrencyMenuBoxFrom(currencyRates: CurrencyRates, modifier: Modifier) {
 
 // -------CURRENCY MENU BOX  TO---------------
 @Composable
-fun CurrencyMenuBoxTo(myRatesList: List<MyRate>, modifier: Modifier) {
+fun CurrencyMenuBoxTo(
+    myRatesList: List<Rates>,
+    onRateChange: (Double) -> Unit,
+    modifier: Modifier
+) {
 //
     var rate by rememberSaveable { mutableStateOf(myRatesList[0].rate) }
 
@@ -199,7 +200,6 @@ fun CurrencyMenuBoxTo(myRatesList: List<MyRate>, modifier: Modifier) {
             OutlinedTextField(value = mSelectedText,
                 onValueChange = { mSelectedText = it },
                 modifier = Modifier
-//                .fillMaxWidth()
                     .width(100.dp)
                     .onGloballyPositioned { coordinates ->
                         // This value is used to assign the same width
@@ -234,19 +234,7 @@ fun CurrencyMenuBoxTo(myRatesList: List<MyRate>, modifier: Modifier) {
                 .fillMaxHeight()  //fill the max height
                 .width(25.dp)
         )
+        onRateChange(rate)
         OutlinedTextFieldTo(amount = theAmount, rate = rate)
     }
 } // End Currency Menu Box To
-
-@Composable
-fun ConvertCurrency(amountX: String, currencyRates: CurrencyRates) {
-    Button(
-        onClick = { },
-        shape = RoundedCornerShape(5.dp),
-        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary),
-    ) {
-        Text(
-            text = "Convert", modifier = Modifier.padding(8.dp)
-        )
-    }
-}

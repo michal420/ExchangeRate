@@ -1,4 +1,4 @@
-package com.example.exchangerate
+package com.example.exchangerate.nav
 
 // Class to hold navigation objects/destination routes
 sealed class NavRoutes(val route: String) {

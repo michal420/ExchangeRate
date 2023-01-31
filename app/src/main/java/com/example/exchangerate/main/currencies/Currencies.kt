@@ -1,4 +1,4 @@
-package com.example.exchangerate.screens
+package com.example.exchangerate.main.currencies
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel

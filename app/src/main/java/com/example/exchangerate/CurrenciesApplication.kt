@@ -1,6 +1,7 @@
 package com.example.exchangerate
 
 import android.app.Application
+import android.content.Context
 import com.example.exchangerate.data.AppContainer
 import com.example.exchangerate.data.DefaultAppContainer
 
@@ -9,6 +10,7 @@ class CurrenciesApplication : Application() {
     lateinit var container: AppContainer
     override fun onCreate() {
         super.onCreate()
-        container = DefaultAppContainer()
+        val context: Context = applicationContext
+        container = DefaultAppContainer(context)
     }
 }

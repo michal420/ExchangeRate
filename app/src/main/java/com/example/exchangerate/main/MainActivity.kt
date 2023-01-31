@@ -1,12 +1,10 @@
-package com.example.exchangerate
+package com.example.exchangerate.main
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,22 +23,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.exchangerate.screens.Latest
-import com.example.exchangerate.screens.Converter
-import com.example.exchangerate.screens.Currencies
-import java.nio.file.Files.size
+import com.example.exchangerate.nav.NavBarItems
+import com.example.exchangerate.nav.NavRoutes
+import com.example.exchangerate.R
+import com.example.exchangerate.main.latest.Latest
+import com.example.exchangerate.main.converter.Converter
+import com.example.exchangerate.main.currencies.Currencies
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

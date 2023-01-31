@@ -1,4 +1,4 @@
-package com.example.exchangerate.screens
+package com.example.exchangerate.main.currencies
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.exchangerate.R
-import com.example.exchangerate.model.MyCurrency
 
 @Composable
 fun CurrenciesHomeScreen(
@@ -23,7 +22,7 @@ fun CurrenciesHomeScreen(
 ) {
     when (currenciesUiState) {
         is CurrenciesUiState.Loading -> LoadingScreen(modifier)
-        is CurrenciesUiState.Success -> CurrenciesListScreen(currenciesUiState.currencies, modifier)
+        is CurrenciesUiState.Success -> CurrenciesListScreen(currenciesUiState.currencies)
         is CurrenciesUiState.Error -> ErrorScreen(retryAction, modifier)
     }
 }
@@ -59,22 +58,12 @@ fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
     }
 }
 
-fun makeList(m: Map<String, String>): List<MyCurrency> {
-    val currenciesList = mutableListOf<MyCurrency>()
-    val iter = m.keys.iterator()
-    while (iter.hasNext()) {
-        val key = iter.next()
-        val value = m[key]
-        if (value != null) {
-            currenciesList.add(MyCurrency(key, value))
-        }
-    }
-    return currenciesList
-}
-
+/*
+The Home screen displaying the success - list of currencies
+ */
 @Composable
-fun CurrenciesListScreen(currencies: Map<String, String>, modifier: Modifier = Modifier) {
-    val currenciesList = makeList(currencies)
+fun CurrenciesListScreen(currencies: Map<String, String>) {
+    val currenciesList = makeCurrenciesList(currencies)
 
     LazyColumn {
         items(items = currenciesList, key = { currency -> currency.symbol }) { currency ->
