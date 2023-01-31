@@ -1,7 +1,6 @@
 package com.example.exchangerate.main
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -37,6 +36,7 @@ import com.example.exchangerate.R
 import com.example.exchangerate.main.latest.Latest
 import com.example.exchangerate.main.converter.Converter
 import com.example.exchangerate.main.currencies.Currencies
+import com.example.exchangerate.nav.getTitleByRoute
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -144,16 +144,6 @@ fun NavigationHost(navController: NavHostController) {
         }
     }
 } // end NavigationHost
-
-// Function to get title string of the route
-fun getTitleByRoute(context: Context, route: String?): String {
-    return when (route) {
-        "latest" -> context.getString(R.string.latest_conversion)
-        // other cases
-        "converter" -> context.getString(R.string.currency_converter)
-        else -> context.getString(R.string.currencies_list)
-    }
-}
 
 @Composable
 fun ExchangeRateTopAppBar(navController: NavHostController) {
