@@ -71,7 +71,6 @@ fun CurrenciesListScreen(currencies: Map<String, String>) {
     LazyColumn {
         items(items = currenciesList, key = { currency -> currency.shortName }) { currency ->
             cur = Currency.getInstance(currency.shortName)
-//            CurrenciesListCard(cur.symbol, symbol = currency.shortName, name = currency.name)
 
             if (cur.symbol == currency.shortName) {
                 CurrenciesListCard("", shortName = currency.shortName, name = currency.name)
