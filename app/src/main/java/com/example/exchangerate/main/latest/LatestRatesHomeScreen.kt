@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.exchangerate.model.CurrencyRates
-import com.example.exchangerate.model.Rates
+import com.example.exchangerate.model.Rate
 import com.example.exchangerate.main.currencies.ErrorScreen
 import com.example.exchangerate.main.currencies.LoadingScreen
 import java.time.LocalDate
@@ -35,7 +35,8 @@ fun RatesHomeScreen(
 
 @Composable
 fun RatesScreen(currencyRates: CurrencyRates) {
-//    // Return currency symbol and rates as the list of MyRates
+    var cur: Currency
+    // Return currency shortName and rates as the list of MyRates
     val myRatesList = makeRatesList(currencyRates.rates)
 
     LazyColumn {
@@ -43,7 +44,8 @@ fun RatesScreen(currencyRates: CurrencyRates) {
             CurrentDate()
         }
         items(myRatesList) { r ->
-            RatesCard(r)
+            cur = Currency.getInstance(r.shortName)
+            RatesCard(cur.symbol.last().toString(), r)
         }
     }
 }
@@ -72,8 +74,8 @@ fun CurrentDate(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun RatesCard(rates: Rates, modifier: Modifier = Modifier) {
-    val euroSymbol = Currency.getInstance(Locale.GERMANY).symbol
+fun RatesCard(cur: String, rates: Rate, modifier: Modifier = Modifier) {
+    val euroSymbol = Currency.getInstance(Locale.getDefault()).symbol
 
     Card(
         modifier = modifier
@@ -82,7 +84,7 @@ fun RatesCard(rates: Rates, modifier: Modifier = Modifier) {
         elevation = 4.dp
     ) {
         Text(
-            text = "1$euroSymbol = ${rates.rate} ${rates.symbol}",
+            text = "1$euroSymbol = ${cur}${rates.rate} ${rates.shortName}",
             modifier = Modifier.padding(16.dp),
             style = MaterialTheme.typography.body1
         )

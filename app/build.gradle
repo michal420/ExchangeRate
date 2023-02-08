@@ -1,8 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-//    id 'org.jetbrains.kotlin.plugin.serialization' version '1.7.10'
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.10'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.0'
 
     id 'kotlin-kapt'
 //    id 'dagger.hilt.android.plugin'
@@ -46,23 +45,31 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.1.1'
+        kotlinCompilerExtensionVersion '1.4.0'
     }
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+    // Always show the result of every unit test when running via command line, even if it passes.
+    testOptions.unitTests {
+        includeAndroidResources = true
+        returnDefaultValues = true
+    }
 }
 
 dependencies {
+    // Coroutines test
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+
     // Chucker
     implementation "com.github.chuckerteam.chucker:library:3.5.2"
 
 //    // Dagger - Hilt
-    implementation "com.google.dagger:hilt-android:2.44"
+    implementation "com.google.dagger:hilt-android:2.44.2"
     implementation 'androidx.core:core-animation:1.0.0-beta01'
-    implementation 'androidx.room:room-common:2.4.2'
+    implementation 'androidx.room:room-common:2.5.0'
     kapt "com.google.dagger:hilt-compiler:2.44"
 
 //    implementation "com.android.tools.build:gradle:4.1.1"
@@ -83,15 +90,15 @@ dependencies {
 //    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
 //    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
 
-   // implementation "com.squareup.okhttp3:okhttp4:4.9.0"
+    // implementation "com.squareup.okhttp3:okhttp4:4.9.0"
 
 // --------------------------------------------------------
 
     // Moshi
-    implementation "com.squareup.moshi:moshi:1.12.0"
+    implementation "com.squareup.moshi:moshi:1.13.0"
 //    kapt "com.squareup.moshi:moshi-kotlin-codegen:1.12.0"
-    implementation "com.squareup.retrofit2:converter-moshi:2.5.0"
-    implementation "com.squareup.moshi:moshi-kotlin:1.12.0"
+    implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
+    implementation "com.squareup.moshi:moshi-kotlin:1.13.0"
 
     /**
      * The first dependency is for the Retrofit2 library itself, and the second dependency is for the Retrofit scalar converter.
@@ -109,34 +116,44 @@ dependencies {
     // Kotlin serialization
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0"
 
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.code.gson:gson:2.10.1'
 
     implementation "androidx.navigation:navigation-compose:2.5.3"
-    implementation "androidx.compose.ui:ui:1.3.2"
-    implementation "androidx.compose.ui:ui-tooling:1.3.1"
+    implementation "androidx.compose.ui:ui:1.3.3"
+    implementation "androidx.compose.ui:ui-tooling:1.3.3"
     implementation "androidx.compose.material:material:1.3.1"
     implementation "androidx.compose.material:material-ripple:1.3.1"
-    implementation 'androidx.compose.runtime:runtime-livedata:1.3.1'
+    implementation 'androidx.compose.runtime:runtime-livedata:1.3.3'
 
     implementation "androidx.compose.material:material-icons-extended:1.3.1"
     implementation 'androidx.compose.material3:material3:1.0.1'
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
-    implementation 'androidx.activity:activity-compose:1.3.1'
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+    implementation 'androidx.activity:activity-compose:1.6.1'
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation 'androidx.compose.material3:material3:1.0.0-alpha02'
+    implementation 'androidx.compose.material3:material3:1.1.0-alpha05'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.android.datatransport:transport-runtime:3.1.2'
-    implementation 'com.google.firebase:firebase-inappmessaging-display-ktx:20.2.0'
-    implementation 'com.google.firebase:firebase-inappmessaging-ktx:20.2.0'
+    implementation 'com.google.android.datatransport:transport-runtime:3.1.8'
+    implementation 'com.google.firebase:firebase-inappmessaging-display-ktx:20.3.0'
+    implementation 'com.google.firebase:firebase-inappmessaging-ktx:20.3.0'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+
+    // Required -- JUnit 4 framework
+    testImplementation "junit:junit:$jUnitVersion"
+    // Unit tests
+    testImplementation "io.mockk:mockk-android:${mockkVersion}"
+    testImplementation "io.mockk:mockk-agent:${mockkVersion}"
+
+    // AndroidX Test - JVM testing
+    testImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"
+    testImplementation "androidx.test:core-ktx:$androidXTestCoreVersion"
 }
 
 // Allow references to generated code

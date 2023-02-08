@@ -30,9 +30,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.exchangerate.R
 import com.example.exchangerate.nav.NavBarItems
 import com.example.exchangerate.nav.NavRoutes
-import com.example.exchangerate.R
 import com.example.exchangerate.main.latest.Latest
 import com.example.exchangerate.main.converter.Converter
 import com.example.exchangerate.main.currencies.Currencies

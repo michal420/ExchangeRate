@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.toSize
 import com.example.exchangerate.main.latest.RatesUiState
 import com.example.exchangerate.main.latest.makeRatesList
 import com.example.exchangerate.model.CurrencyRates
-import com.example.exchangerate.model.Rates
+import com.example.exchangerate.model.Rate
 import com.example.exchangerate.main.currencies.ErrorScreen
 import com.example.exchangerate.main.currencies.LoadingScreen
 import java.text.DecimalFormat
@@ -166,7 +166,7 @@ fun CurrencyMenuBoxFrom(currencyRates: CurrencyRates, modifier: Modifier) {
 // -------CURRENCY MENU BOX  TO---------------
 @Composable
 fun CurrencyMenuBoxTo(
-    myRatesList: List<Rates>,
+    myRatesList: List<Rate>,
     onRateChange: (Double) -> Unit,
     modifier: Modifier
 ) {
@@ -178,7 +178,7 @@ fun CurrencyMenuBoxTo(
     var mExpanded by remember { mutableStateOf(false) }
 
     // Create a string value to store the selected currency
-    var mSelectedText by remember { mutableStateOf(myRatesList[0].symbol) }
+    var mSelectedText by remember { mutableStateOf(myRatesList[0].shortName) }
 
     var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
 
@@ -220,11 +220,11 @@ fun CurrencyMenuBoxTo(
             ) {
                 myRatesList.forEach { label ->
                     DropdownMenuItem(onClick = {
-                        mSelectedText = label.symbol
+                        mSelectedText = label.shortName
                         rate = label.rate
                         mExpanded = false
                     }) {
-                        Text(text = label.symbol)
+                        Text(text = label.shortName)
                     }
                 }
             }

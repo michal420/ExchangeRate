@@ -1,4 +1,4 @@
-package com.example.exchangerate.network
+package com.example.exchangerate.data
 
 import com.example.exchangerate.model.*
 import retrofit2.http.GET

@@ -17,7 +17,7 @@ object NavBarItems {
             route = "converter"
         ),
         BarItem(
-            title = "Currencies list",
+            title = "Currency list",
             image = Icons.Filled.AttachMoney,
             route = "currencies"
         )

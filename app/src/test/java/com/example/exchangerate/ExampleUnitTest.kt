@@ -1,8 +1,13 @@
 package com.example.exchangerate
 
+import com.example.exchangerate.data.CurrenciesRepository
 import org.junit.Test
 
 import org.junit.Assert.*
+
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.not
+import org.hamcrest.MatcherAssert.assertThat
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -14,4 +19,5 @@ class ExampleUnitTest {
     fun addition_isCorrect() {
         assertEquals(4, 2 + 2)
     }
+
 }
