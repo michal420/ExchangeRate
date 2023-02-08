@@ -1,7 +1,6 @@
 package com.example.exchangerate.data
 
 import com.example.exchangerate.model.CurrencyRates
-import com.example.exchangerate.network.CurrenciesApiService
 
 // Repository that fetches data
 interface CurrenciesRepository {

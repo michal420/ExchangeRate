@@ -10,10 +10,8 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.exchangerate.CurrenciesApplication
 import com.example.exchangerate.data.CurrenciesRepository
-import com.example.exchangerate.model.Currencies
+import com.example.exchangerate.model.Currency
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import java.io.IOException
 
 /**
  * UI state for the Home screen
@@ -27,7 +25,7 @@ sealed interface CurrenciesUiState {
 class CurrenciesViewModel(private val currenciesRepository: CurrenciesRepository) : ViewModel() {
     /** The mutable State that stores the status of the most recent request */
     var currenciesUiState: CurrenciesUiState by mutableStateOf(CurrenciesUiState.Loading)
-        private set
+        set
 
     /**
      * Call getCurrencies() on init so we can display status immediately.
@@ -44,9 +42,7 @@ class CurrenciesViewModel(private val currenciesRepository: CurrenciesRepository
             currenciesUiState = CurrenciesUiState.Loading
             currenciesUiState = try {
                 CurrenciesUiState.Success(currenciesRepository.getCurrencies())
-            } catch (e: IOException) {
-                CurrenciesUiState.Error
-            } catch (e: HttpException) {
+            } catch (exp: Exception) {
                 CurrenciesUiState.Error
             }
         }
@@ -58,7 +54,8 @@ class CurrenciesViewModel(private val currenciesRepository: CurrenciesRepository
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as CurrenciesApplication)
+                val application =
+                    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as CurrenciesApplication)
                 val currencyRepository = application.container.currenciesRepository
                 CurrenciesViewModel(currenciesRepository = currencyRepository)
             }
@@ -67,15 +64,15 @@ class CurrenciesViewModel(private val currenciesRepository: CurrenciesRepository
 
 }
 
-// Convert map to Currencies list
-fun makeCurrenciesList(currenciesMap: Map<String, String>): List<Currencies> {
-    val currenciesList = mutableListOf<Currencies>()
+// Convert map to Currency list
+fun makeCurrenciesList(currenciesMap: Map<String, String>): List<Currency> {
+    val currenciesList = mutableListOf<Currency>()
     val iter = currenciesMap.keys.iterator()
     while (iter.hasNext()) {
         val key = iter.next()
         val value = currenciesMap[key]
         if (value != null) {
-            currenciesList.add(Currencies(key, value))
+            currenciesList.add(Currency(key, value))
         }
     }
     return currenciesList

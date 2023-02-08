@@ -1,6 +1,6 @@
 package com.example.exchangerate.model
 
-data class Rates(
-    val symbol: String,
+data class Rate(
+    val shortName: String,
     val rate: Double
 )

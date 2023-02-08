@@ -11,10 +11,8 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.exchangerate.CurrenciesApplication
 import com.example.exchangerate.data.RatesRepository
 import com.example.exchangerate.model.CurrencyRates
-import com.example.exchangerate.model.Rates
+import com.example.exchangerate.model.Rate
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import java.io.IOException
 
 sealed interface RatesUiState {
     data class Success(val rates: CurrencyRates) : RatesUiState
@@ -25,7 +23,7 @@ sealed interface RatesUiState {
 class LatestRatesViewModel(private val ratesRepository: RatesRepository) : ViewModel() {
     /** The mutable State that stores the status of the most recent request */
     var ratesUiState: RatesUiState by mutableStateOf(RatesUiState.Loading)
-        private set
+        set
 
     /**
      * Call getCurrencies() on init so we can display status immediately.
@@ -42,9 +40,7 @@ class LatestRatesViewModel(private val ratesRepository: RatesRepository) : ViewM
             ratesUiState = RatesUiState.Loading
             ratesUiState = try {
                 RatesUiState.Success(ratesRepository.getRates())
-            } catch (e: IOException) {
-                RatesUiState.Error
-            } catch (e: HttpException) {
+            } catch (e: Exception) {
                 RatesUiState.Error
             }
         }
@@ -63,32 +59,17 @@ class LatestRatesViewModel(private val ratesRepository: RatesRepository) : ViewM
             }
         }
     }
-
-    // Function to convert array to Rates list
-//    fun makeRatesList(m: Map<String, Double>): List<Rates> {
-//        val ratesList = mutableListOf<Rates>()
-//        val iter = m.keys.iterator()
-//        while (iter.hasNext()) {
-//            val key = iter.next()
-//            val value = m[key]
-//            if (value != null) {
-//                ratesList.add(Rates(key, value))
-//            }
-//        }
-//        return ratesList
-//    }
-
 }
 
-// Function to convert array to Rates list
-fun makeRatesList(m: Map<String, Double>): List<Rates> {
-    val ratesList = mutableListOf<Rates>()
+// Function to convert array to Rate list
+fun makeRatesList(m: Map<String, Double>): List<Rate> {
+    val ratesList = mutableListOf<Rate>()
     val iter = m.keys.iterator()
     while (iter.hasNext()) {
         val key = iter.next()
         val value = m[key]
         if (value != null) {
-            ratesList.add(Rates(key, value))
+            ratesList.add(Rate(key, value))
         }
     }
     return ratesList

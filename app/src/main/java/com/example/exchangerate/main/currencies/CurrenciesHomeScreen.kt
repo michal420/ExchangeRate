@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.exchangerate.R
+import java.text.NumberFormat
+import java.util.*
 
 @Composable
 fun CurrenciesHomeScreen(
@@ -36,7 +38,7 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
         contentAlignment = Alignment.Center,
         modifier = modifier.fillMaxSize()
     ) {
-        Text("Retrieving currencies")
+        Text(stringResource(R.string.loading_text))
     }
 }
 
@@ -64,16 +66,30 @@ The Home screen displaying the success - list of currencies
 @Composable
 fun CurrenciesListScreen(currencies: Map<String, String>) {
     val currenciesList = makeCurrenciesList(currencies)
+    var cur: Currency
 
     LazyColumn {
-        items(items = currenciesList, key = { currency -> currency.symbol }) { currency ->
-            CurrenciesListCard(symbol = currency.symbol, name = currency.name)
+        items(items = currenciesList, key = { currency -> currency.shortName }) { currency ->
+            cur = Currency.getInstance(currency.shortName)
+//            CurrenciesListCard(cur.symbol, symbol = currency.shortName, name = currency.name)
+
+            if (cur.symbol == currency.shortName) {
+                CurrenciesListCard("", shortName = currency.shortName, name = currency.name)
+            } else {
+                CurrenciesListCard(cur.symbol.last().toString(), shortName = currency.shortName, name = currency.name)
+            }
+
         }
     }
 }
 
 @Composable
-fun CurrenciesListCard(symbol: String, name: String, modifier: Modifier = Modifier) {
+fun CurrenciesListCard(
+    curSymbol: String,
+    shortName: String,
+    name: String,
+    modifier: Modifier = Modifier
+) {
     Card(
         modifier = modifier
             .padding(4.dp, 2.dp)
@@ -82,7 +98,7 @@ fun CurrenciesListCard(symbol: String, name: String, modifier: Modifier = Modifi
     ) {
         Column {
             Text(
-                text = "$symbol - $name",
+                text = "${curSymbol} $shortName - $name",
                 modifier = Modifier.padding(16.dp),
                 style = MaterialTheme.typography.body1
             )
