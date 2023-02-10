@@ -2,6 +2,7 @@ package com.example.exchangerate.main.latest
 
 import com.example.exchangerate.CoroutinesTestRule
 import com.example.exchangerate.data.RatesRepository
+import com.example.exchangerate.main.currencies.CurrenciesUiState
 import com.example.exchangerate.model.CurrencyRates
 import com.example.exchangerate.model.Rate
 import io.mockk.MockKAnnotations
@@ -57,6 +58,21 @@ class LatestRatesViewModelTest {
         // Then
         assertEquals(cut.ratesUiState, RatesUiState.Success(getRatesStub))
     }
+
+//    @Test
+//    fun `Given Success when getRates returning null object then should be success`() {
+//        // Given
+//        val nullRatesObject: CurrencyRates? = null
+//        coEvery {
+//            ratesRepository.getRates()
+//        } coAnswers { nullRatesObject!! }
+//
+//        // When
+//        cut.getRates()
+//
+//        // Then
+//    assertNull("Is Null", RatesUiState.Success(nullRatesObject!!))
+//    }
 
     @Test
     fun `Given Error when gerRates the rateUiState should be error`() {
